@@ -1,3 +1,6 @@
-Library
-Temp
+/Library
+obj/
+/Temp
+*.csproj
+*.sln
 *.userprefs
