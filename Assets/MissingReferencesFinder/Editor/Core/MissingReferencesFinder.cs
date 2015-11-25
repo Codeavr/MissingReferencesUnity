@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Text;
 
 public interface IResult
 {
@@ -166,8 +167,17 @@ public class MissingReferencesFinder
 	/// </summary>
 	private static string GetFullPath(GameObject go)
 	{
-		return go.transform.parent == null
-			? go.name
-				: GetFullPath(go.transform.parent.gameObject) + "/" + go.name;
+		StringBuilder sb = new StringBuilder(30);
+		Transform current = go.transform.parent;
+
+		while (current != null)
+		{
+			sb.Insert(0, string.Format("{0}/", current.gameObject.name));
+			current = current.parent;
+		}
+
+		sb.Append(go.name);
+
+		return sb.ToString();
 	}
 }
