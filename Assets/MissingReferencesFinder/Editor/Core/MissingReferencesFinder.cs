@@ -64,13 +64,14 @@ public class MissingReferenceResult : IResult
 /// </summary>
 public class MissingReferencesFinder 
 {
-
-	private static List<MissingReferenceResult> FindMissingReferences(string context, GameObject[] objects)
+	public List<MissingReferenceResult> FindMissingReferences(string context, GameObject[] objects)
 	{
 		List<MissingReferenceResult> result = new List<MissingReferenceResult>();
 
 		foreach (var go in objects)
 		{
+			Debug.Log(GetFullPath(go));
+				
 			var components = go.GetComponents<Component>();
 			
 			foreach (var c in components)
@@ -78,7 +79,7 @@ public class MissingReferencesFinder
 				// Missing components will be null, we can't find their type, etc.
 				if (!c)
 				{
-//					Debug.LogError("Missing Component in GO: " + GetFullPath(go), go);
+					Debug.LogError("Missing Component in GO: " + GetFullPath(go), go);
 
 					result.Add(new MissingReferenceResult(go.name, GetFullPath(go)));
 					continue;
@@ -95,7 +96,7 @@ public class MissingReferencesFinder
 						if (sp.objectReferenceValue == null
 						    && sp.objectReferenceInstanceIDValue != 0)
 						{
-//							ShowError(context, go, c.GetType().Name, ObjectNames.NicifyVariableName(sp.name));
+							ShowError(context, go, c.GetType().Name, ObjectNames.NicifyVariableName(sp.name));
 
 							result.Add(new MissingReferenceResult(go.name, ObjectNames.NicifyVariableName(sp.name)));
 						}
@@ -107,7 +108,7 @@ public class MissingReferencesFinder
 		return result;
 	}
 
-	private static GameObject[] GetSceneObjects()
+	public static GameObject[] GetSceneObjects()
 	{
 		// Use this method since GameObject.FindObjectsOfType will not return disabled objects.
 		return Resources.FindObjectsOfTypeAll<GameObject>()
