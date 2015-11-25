@@ -61,7 +61,7 @@ public class MissingReferenceResult : IResult
 /// <summary>
 /// A helper editor script for finding missing references to objects.
 /// </summary>
-public class MissingReferencesFinder : MonoBehaviour 
+public class MissingReferencesFinder 
 {
 	/// </summary>
 	private const string MENU_ROOT = "Tools/Missing References/";
