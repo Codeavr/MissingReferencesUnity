@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
@@ -17,7 +18,7 @@ public class MissingReferencesFinder : MonoBehaviour
 	public static void FindMissingReferencesInCurrentScene()
 	{
 		var sceneObjects = GetSceneObjects();
-		FindMissingReferences(EditorApplication.currentScene, sceneObjects);
+		FindMissingReferences(EditorSceneManager.GetActiveScene().name, sceneObjects);
 	}
 
 	/// <summary>
@@ -29,7 +30,7 @@ public class MissingReferencesFinder : MonoBehaviour
 	{
 		foreach (var scene in EditorBuildSettings.scenes.Where(s => s.enabled))
 		{
-			EditorApplication.OpenScene(scene.path);
+			EditorSceneManager.OpenScene(scene.path);
 			FindMissingReferencesInCurrentScene();
 		}
 	}
@@ -83,7 +84,7 @@ public class MissingReferencesFinder : MonoBehaviour
 	private static GameObject[] GetSceneObjects()
 	{
 		// Use this method since GameObject.FindObjectsOfType will not return disabled objects.
-		return Resources.FindObjectsOfTypeAll<GameObject>()
+		return UnityEngine.Resources.FindObjectsOfTypeAll<GameObject>()
 			.Where(go => string.IsNullOrEmpty(AssetDatabase.GetAssetPath(go))
 			       && go.hideFlags == HideFlags.None).ToArray();
 	}
